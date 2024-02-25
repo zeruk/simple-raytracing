@@ -11,6 +11,10 @@ public:
     Vector3(float x, float y, float z) : x(x), y(y), z(z) {}
 
     // Operator overloading
+    Vector3 operator+(const Vector3 &v) const
+    {
+        return Vector3(x + v.x, y + v.y, z + v.z);
+    }
     Vector3 operator-(const Vector3 &v) const
     {
         return Vector3(x - v.x, y - v.y, z - v.z);
@@ -32,6 +36,20 @@ public:
     float dot(const Vector3 &v) const
     {
         return x * v.x + y * v.y + z * v.z;
+    }
+
+    Vector3 normalize() const
+    {
+        float length = std::sqrt(x * x + y * y + z * z);
+        if (length != 0.0f)
+        {
+            return Vector3(x / length, y / length, z / length);
+        }
+        else
+        {
+            // Return a default vector if the length is zero to avoid division by zero
+            return Vector3();
+        }
     }
 
     friend std::ostream &operator<<(std::ostream &out, const Vector3 &vect)
