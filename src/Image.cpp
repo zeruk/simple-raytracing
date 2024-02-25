@@ -1,9 +1,9 @@
+#pragma once
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 #include "./Vector3.cpp"
-#pragma once
 
 class Image
 {
