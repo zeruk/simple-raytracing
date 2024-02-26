@@ -1,10 +1,15 @@
 #include <iostream>
 #include <fstream>
+#include <chrono>
 #include "../src/Vector3.cpp"
 #include "./Image.cpp"
 #include "./Camera.cpp"
 #include "./Sphere.cpp"
+#include "./Plane.cpp"
 #include "./Scene.cpp"
+
+const int RENDERS = 5;
+const int RAY_BOUNCES = 6;
 
 int main()
 {
@@ -15,7 +20,7 @@ int main()
     Vector3 cameraPosition(0.0f, 0.0f, 5.0f);
     Vector3 targetPoint(0.0f, 0.0f, -1.0f);
     Vector3 upVector(1.0f, 0.0f, 0.0f);
-    Camera camera(1.0f, cameraPosition, targetPoint, upVector, imageWidth, imageHeight);
+    Camera camera(1.0f, cameraPosition, targetPoint, upVector, imageWidth, imageHeight, 111);
 
     // LIGHTS
     std::vector<Light> lights = {
@@ -48,7 +53,20 @@ int main()
     // SCENE
     Scene scene(camera, lights, objects);
 
-    Image resultImage = scene.render(imageWidth, imageHeight, 5);
+    Image resultImage(imageWidth, imageHeight);
+    // initial render
+    for (size_t i = 0; i < RENDERS; i++)
+    {
+        auto start = std::chrono::high_resolution_clock::now();
+        resultImage = resultImage + scene.render(imageWidth, imageHeight, RAY_BOUNCES) * (1.0f / RENDERS);
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+
+        std::cout << "Done " << i + 1 << "/" << RENDERS
+                  << " renders. (Time: "
+                  << duration.count() / 1000 << "ms)"
+                  << std::endl;
+    }
 
     // Save the result image to a file (you can use the Image write method from previous implementations)
     resultImage.write("rendered_image.ppm");

@@ -42,4 +42,35 @@ public:
         file.close();
         return true;
     }
+
+    // Operator overloading
+    Image operator+(const Image &v) const
+    {
+        Image image(width, height);
+
+        for (int y = 0; y < height; ++y)
+        {
+            for (int x = 0; x < width; ++x)
+            {
+                image.pixels[x][y] = pixels[x][y] + v.pixels[x][y];
+            }
+        }
+
+        return image;
+    }
+
+    Image operator*(const float &l) const
+    {
+        Image image(width, height);
+
+        for (int y = 0; y < height; ++y)
+        {
+            for (int x = 0; x < width; ++x)
+            {
+                image.pixels[x][y] = pixels[x][y] * l;
+            }
+        }
+
+        return image;
+    }
 };
