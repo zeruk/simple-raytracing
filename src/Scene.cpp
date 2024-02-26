@@ -10,10 +10,10 @@ class Scene
 {
 public:
   std::vector<Light> lights;
-  std::vector<Object> objects;
+  std::vector<Object *> objects;
   Camera camera;
 
-  Scene(const Camera &camera, const std::vector<Light> &lights, const std::vector<Object> &objects) : camera(camera), lights(lights), objects(objects) {}
+  Scene(const Camera &camera, const std::vector<Light> &lights, const std::vector<Object *> &objects) : camera(camera), lights(lights), objects(objects) {}
 
   Image render(int width, int height, int reflectionDepth)
   {
@@ -40,9 +40,9 @@ public:
     bool intersection = false;
     MaterialParameters intersectionInfo, closestIntersection;
 
-    for (const Object &object : objects)
+    for (const auto &object : objects)
     {
-      if (object.intersect(ray, intersectionInfo))
+      if (object->intersect(ray, intersectionInfo))
       {
         if (!intersection)
           closestIntersection = intersectionInfo;
@@ -107,10 +107,10 @@ public:
     Ray shadowRay(point, (light.position - point).normalize());
 
     // Check for intersections with objects in the scene
-    for (const Object &object : objects)
+    for (const auto &object : objects)
     {
       MaterialParameters shadowIntersectionInfo;
-      if (object.intersect(shadowRay, shadowIntersectionInfo))
+      if (object->intersect(shadowRay, shadowIntersectionInfo))
       {
         // std::cout << object.center;
         // If there is an intersection with any object, the point is in shadow

@@ -1,4 +1,4 @@
-#include "../src/Object.cpp"
+#include "../src/Sphere.cpp"
 #include "../src/Vector3.cpp"
 #include "../src/Ray.cpp"
 #include <iostream>
@@ -10,7 +10,7 @@ int test_ray()
   materialParams.specular = Vector3(0.5f, 0.5f, 0.5f); // Example specular coefficient
   materialParams.normal = Vector3(0.0f, 1.0f, 0.0f);   // Example normal vector
 
-  Object sphere(Vector3(0.0f, 0.0f, 0.0f), 1.0f, materialParams);
+  Sphere sphere(Vector3(0.0f, 0.0f, 0.0f), 1.0f, materialParams);
 
   Ray ray(Vector3(0.0f, 2.0f, 0.0f), Vector3(0.0f, -1.0f, 0.0f));
 

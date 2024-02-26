@@ -3,7 +3,7 @@
 #include "../src/Vector3.cpp"
 #include "./Image.cpp"
 #include "./Camera.cpp"
-#include "./Object.cpp"
+#include "./Sphere.cpp"
 #include "./Scene.cpp"
 
 int main()
@@ -35,10 +35,10 @@ int main()
     materialGreen.specular = Vector3(0.25f, 0.25f, 0.25f);
     materialGreen.normal = Vector3(0.0f, 1.0f, 0.0f);
 
-    std::vector<Object> objects = {
-        Object(Vector3(1.0f, -2.0f, -2.0f), 1.0f, materialGreen),
-        Object(Vector3(0.0f, 0.0f, -2.0f), 1.0f, materialRed),
-        Object(Vector3(-1.0f, 1.0f, -4.0f), 1.0f, materialGreen)};
+    std::vector<Object *> objects;
+    objects.push_back(new Sphere(Vector3(1.0f, -2.0f, -2.0f), 1.0f, materialGreen));
+    objects.push_back(new Sphere(Vector3(0.0f, 0.0f, -2.0f), 1.0f, materialRed));
+    objects.push_back(new Sphere(Vector3(-1.0f, 1.0f, -4.0f), 1.0f, materialGreen));
 
     // SCENE
     Scene scene(camera, lights, objects);
