@@ -25,15 +25,19 @@ int main()
     std::vector<Light> lights = {light1};
 
     // SPHERES
-    MaterialParameters materialParams;
-    materialParams.kd = Vector3(0.8f, 0.2f, 0.2f);     // Example diffuse coefficient (red)
-    materialParams.ks = Vector3(0.5f, 0.5f, 0.5f);     // Example specular coefficient
-    materialParams.normal = Vector3(0.0f, 1.0f, 0.0f); // Example normal vector
+    MaterialParameters materialRed;
+    materialRed.diffuse = Vector3(0.8f, 0.2f, 0.2f);
+    materialRed.specular = Vector3(0.5f, 0.5f, 0.5f);
+    materialRed.normal = Vector3(0.0f, 1.0f, 0.0f);
+    MaterialParameters materialGreen;
+    materialGreen.diffuse = Vector3(0.2f, 0.8f, 0.2f);
+    materialGreen.specular = Vector3(0.5f, 0.5f, 0.5f);
+    materialGreen.normal = Vector3(0.0f, 1.0f, 0.0f);
 
-    Object sphere0(Vector3(0.0f, 0.0f, 0.0f), 1.0f, materialParams);
-    Object sphere1(Vector3(1.0f, -1.5f, -2.0f), 1.0f, materialParams);
-    Object sphere2(Vector3(-1.0f, 1.0f, -4.0f), 1.0f, materialParams);
-    std::vector<Object> objects = {sphere0, sphere1, sphere2};
+    std::vector<Object> objects = {
+        Object(Vector3(1.0f, -1.5f, -2.0f), 1.0f, materialGreen),
+        Object(Vector3(0.0f, 0.0f, -2.0f), 1.0f, materialRed),
+        Object(Vector3(-1.0f, 1.0f, -4.0f), 1.0f, materialGreen)};
 
     // SCENE
     Scene scene(camera, lights, objects);

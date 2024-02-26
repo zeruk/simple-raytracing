@@ -5,8 +5,8 @@
 
 struct MaterialParameters
 {
-  Vector3 kd; // Diffuse coefficient
-  Vector3 ks; // Specular coefficient
+  Vector3 diffuse;  // Diffuse coefficient
+  Vector3 specular; // Specular coefficient
   Vector3 normal;
   Vector3 intersectionPoint;
   // Add more material-related parameters as needed
@@ -43,8 +43,8 @@ public:
       intersectionInfo.normal = (intersectionInfo.intersectionPoint - center).normalize();
 
       // Set material properties
-      intersectionInfo.kd = material.kd;
-      intersectionInfo.ks = material.ks;
+      intersectionInfo.diffuse = material.diffuse;
+      intersectionInfo.specular = material.specular;
 
       return true;
     }

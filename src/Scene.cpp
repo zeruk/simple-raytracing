@@ -48,7 +48,7 @@ public:
         // Set pixel color based on intersection
         if (intersection)
         {
-          image.pixels[x][y] = Vector3(1.0f, 1.0f, 1.0f); // White color for intersection
+          image.pixels[x][y] = intersectionInfo.diffuse; // Color for intersection
         }
         else
         {
