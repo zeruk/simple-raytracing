@@ -43,7 +43,7 @@ int main()
     // SCENE
     Scene scene(camera, lights, objects);
 
-    Image resultImage = scene.render(imageWidth, imageHeight);
+    Image resultImage = scene.render(imageWidth, imageHeight, 3);
 
     // Save the result image to a file (you can use the Image write method from previous implementations)
     resultImage.write("rendered_image.ppm");
