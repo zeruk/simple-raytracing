@@ -55,10 +55,13 @@ public:
             light.at(intersectionInfo.intersectionPoint, lightDirection, lightPower);
 
             float dotProduct = std::max(0.0f, intersectionInfo.normal.dot(lightDirection));
-            Vector3 diffuseContribution = intersectionInfo.diffuse.multiplyComponents(lightPower) * dotProduct;
-
-            image.pixels[x][y] = image.pixels[x][y] + diffuseContribution;
+            if (dotProduct > 0.0f)
+            {
+              Vector3 diffuseContribution = intersectionInfo.diffuse.multiplyComponents(lightPower) * dotProduct;
+              image.pixels[x][y] = image.pixels[x][y] + diffuseContribution;
+            }
           }
+          image.pixels[x][y] = image.pixels[x][y].clamp(0.0f, 1.0f);
         }
         else
         {

@@ -23,7 +23,7 @@ int test_image()
   }
 
   // Save the image to a file
-  gradientImage.write("gradient_image.ppm");
+  // gradientImage.write("gradient_image.ppm");
 
   return 0;
 }

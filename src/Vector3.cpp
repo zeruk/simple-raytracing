@@ -65,6 +65,14 @@ public:
         }
     }
 
+    Vector3 clamp(float minVal, float maxVal) const
+    {
+        return Vector3(
+            std::max(minVal, std::min(x, maxVal)),
+            std::max(minVal, std::min(y, maxVal)),
+            std::max(minVal, std::min(z, maxVal)));
+    }
+
     friend std::ostream &operator<<(std::ostream &out, const Vector3 &vect)
     {
         out << "(" << vect.x << ", " << vect.y << ", " << vect.z << ")";

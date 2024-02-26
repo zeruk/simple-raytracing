@@ -19,5 +19,11 @@ int test_vector3()
     if (dotProduct != 32)
         return 1;
 
+    // test 3
+    Vector3 v5 = Vector3(-0.2f, 2000.0f, 2.0f).clamp(0.0f, 100.0f);
+    std::cout << "clamp" << v5;
+    if (v5.x != 0)
+        return 1;
+
     return 0;
 }
