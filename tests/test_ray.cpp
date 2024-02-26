@@ -17,17 +17,28 @@ int test_ray()
   MaterialParameters intersectionInfo;
   bool intersects = sphere.intersect(ray, intersectionInfo);
 
-  if (intersects)
-  {
-    return 0;
-    std::cout << "Intersection Point: " << intersectionInfo.intersectionPoint << std::endl;
-    std::cout << "Normal Vector: " << intersectionInfo.normal << std::endl;
-    std::cout << "Diffuse Coefficient: " << intersectionInfo.diffuse << std::endl;
-    std::cout << "Specular Coefficient: " << intersectionInfo.specular << std::endl;
-  }
-  else
-  {
+  // should intersect
+  if (!intersects)
     return 1;
-    std::cout << "No intersection." << std::endl;
+
+  Ray ray1(Vector3(0.0f, 2.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f));
+
+  // should NOT intersect
+  if (sphere.intersect(ray1, intersectionInfo))
+  {
+    std::cout << "Intersect! intersection point:" << intersectionInfo.intersectionPoint;
+    return 1;
   }
+
+  // intersecting, but in opposite direction
+  Ray ray2(Vector3(0.0f, 2.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
+
+  // should NOT intersect
+  if (sphere.intersect(ray2, intersectionInfo))
+  {
+    std::cout << "Intersect! intersection point:" << intersectionInfo.intersectionPoint;
+    return 1;
+  }
+
+  return 0;
 }

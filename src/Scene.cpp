@@ -24,6 +24,7 @@ public:
   Image render(int width, int height)
   {
     Image image(width, height);
+    Vector3 ambientColor(0.1f, 0.1f, 0.1f); // Ambient color for the scene
 
     for (int y = 0; y < height; ++y)
     {
@@ -34,34 +35,60 @@ public:
 
         // Check for intersections with objects in the scene
         bool intersection = false;
-        MaterialParameters intersectionInfo;
+        MaterialParameters intersectionInfo, closestIntersection;
 
         for (const Object &object : objects)
         {
           if (object.intersect(ray, intersectionInfo))
           {
+            if (!intersection)
+              closestIntersection = intersectionInfo;
             intersection = true;
-            break; // Stop at the first intersection
-          }        // TODO: Choose closest one
+
+            if ((closestIntersection.intersectionPoint - camera.position).abs() >
+                (intersectionInfo.intersectionPoint - camera.position).abs())
+            {
+              std::swap(closestIntersection, intersectionInfo);
+            }
+            // Choose closest one
+          }
         }
 
         // Set pixel color based on intersection
         if (intersection)
         {
           image.pixels[x][y] = Vector3(0.0f, 0.0f, 0.0f);
+          Vector3 totalDiffuse(0.0f, 0.0f, 0.0f);
+          Vector3 totalSpecular(0.0f, 0.0f, 0.0f);
           for (const Light &light : lights)
           {
-            Vector3 lightDirection, lightPower;
-            light.at(intersectionInfo.intersectionPoint, lightDirection, lightPower);
-
-            float dotProduct = std::max(0.0f, intersectionInfo.normal.dot(lightDirection));
-            if (dotProduct > 0.0f)
+            // Check if the point is in shadow
+            if (!isPointInShadow(closestIntersection.intersectionPoint, light))
             {
-              Vector3 diffuseContribution = intersectionInfo.diffuse.multiplyComponents(lightPower) * dotProduct;
-              image.pixels[x][y] = image.pixels[x][y] + diffuseContribution;
+              Vector3 lightDirection, lightPower;
+              light.at(closestIntersection.intersectionPoint, lightDirection, lightPower);
+
+              float dotProduct = std::max(0.0f, closestIntersection.normal.dot(lightDirection));
+              if (dotProduct > 0.0f)
+              {
+                Vector3 diffuseContribution = closestIntersection.diffuse.multiplyComponents(lightPower) * dotProduct;
+                totalDiffuse = totalDiffuse + diffuseContribution;
+              }
+
+              // Specular reflection model (Phong reflection model)
+              Vector3 reflectedDirection = closestIntersection.normal * (lightDirection.dot(closestIntersection.normal)) * 2.0f - lightDirection;
+              float dotProductSpecular = std::max(0.0f, ray.direction.dot(reflectedDirection));
+              Vector3 specularContribution = closestIntersection.specular.multiplyComponents(lightPower) * std::pow(dotProductSpecular, 32);
+
+              totalSpecular = totalSpecular + specularContribution;
             }
           }
-          image.pixels[x][y] = image.pixels[x][y].clamp(0.0f, 1.0f);
+          // Ambient reflection model
+          Vector3 ambientContribution = ambientColor.multiplyComponents(closestIntersection.diffuse);
+
+          // Total lighting (diffuse + specular + ambient)
+          Vector3 totalLighting = totalDiffuse + totalSpecular + ambientContribution;
+          image.pixels[x][y] = totalLighting.clamp(0.0f, 1.0f);
         }
         else
         {
@@ -71,5 +98,24 @@ public:
     }
 
     return image;
+  }
+
+  bool isPointInShadow(const Vector3 &point, const Light &light)
+  {
+    Ray shadowRay(point, (light.position - point).normalize());
+
+    // Check for intersections with objects in the scene
+    for (const Object &object : objects)
+    {
+      MaterialParameters shadowIntersectionInfo;
+      if (object.intersect(shadowRay, shadowIntersectionInfo))
+      {
+        // std::cout << object.center;
+        // If there is an intersection with any object, the point is in shadow
+        return true;
+      }
+    }
+    // If no intersections are found, the point is not in shadow
+    return false;
   }
 };

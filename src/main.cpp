@@ -8,21 +8,22 @@
 
 int main()
 {
-    int imageWidth = 300;
-    int imageHeight = 300;
+    int imageWidth = 512;
+    int imageHeight = 512;
 
     // CAMERA
     Vector3 cameraPosition(0.0f, 0.0f, 5.0f);
     Vector3 targetPoint(0.0f, 0.0f, -1.0f);
-    Vector3 upVector(0.0f, 1.0f, 0.0f);
+    Vector3 upVector(1.0f, 0.0f, 0.0f);
     Camera camera(1.0f, cameraPosition, targetPoint, upVector, imageWidth, imageHeight);
 
     // LIGHTS
-    Vector3 lightPosition(5.0f, 5.0f, 5.0f);
-    Vector3 lightIntensity(100.0f, 100.0f, 100.0f);
-
-    Light light1(lightPosition, lightIntensity);
-    std::vector<Light> lights = {light1};
+    std::vector<Light> lights = {
+        // position, intencity
+        Light(Vector3(5.0f, 5.0f, 5.0f), Vector3(4.0f, 4.0f, 4.0f)),
+        Light(Vector3(5.0f, -6.0f, 0.0f), Vector3(5.0f, 5.0f, 5.0f))
+        //
+    };
 
     // SPHERES
     MaterialParameters materialRed;

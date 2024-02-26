@@ -73,6 +73,11 @@ public:
             std::max(minVal, std::min(z, maxVal)));
     }
 
+    float abs() const
+    {
+        return std::sqrt(x * x + y * y + z * z);
+    }
+
     friend std::ostream &operator<<(std::ostream &out, const Vector3 &vect)
     {
         out << "(" << vect.x << ", " << vect.y << ", " << vect.z << ")";
