@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include "../src/Vector3.cpp"
 
