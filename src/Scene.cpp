@@ -90,11 +90,10 @@ public:
       Vector3 ambientContribution = ambientColor.multiplyComponents(closestIntersection.diffuse);
 
       // Reflection contribution
-      // Vector3 reflectionContribution = calculateReflectionContribution(ray, intersectionInfo, reflectionDepth);
+      Vector3 reflectionContribution = calculateReflectionContribution(ray, intersectionInfo, reflectionDepth);
 
       // Total lighting (diffuse + specular + ambient)
-      // + reflectionContribution
-      Vector3 totalLighting = totalDiffuse + totalSpecular + ambientContribution;
+      Vector3 totalLighting = totalDiffuse + totalSpecular + reflectionContribution + ambientContribution;
       return totalLighting.clamp(0.0f, 1.0f);
     }
     else
@@ -120,5 +119,27 @@ public:
     }
     // If no intersections are found, the point is not in shadow
     return false;
+  }
+
+  Vector3 calculateReflectionContribution(const Ray &ray, const MaterialParameters &intersectionInfo, int reflectionDepth)
+  {
+    if (reflectionDepth <= 0)
+    {
+      return Vector3(0.0f, 0.0f, 0.0f); // No more reflections, return black
+    }
+
+    // Calculate reflection direction
+    Vector3 reflectedDirection = ray.direction - intersectionInfo.normal * 2.0f * (ray.direction.dot(intersectionInfo.normal));
+
+    // Create a reflected ray
+    Ray reflectedRay(intersectionInfo.intersectionPoint, reflectedDirection);
+
+    // Recursively compute illumination on the reflected ray
+    Vector3 reflectedIllumination = renderRay(reflectedRay, reflectionDepth - 1);
+
+    // Apply specular coefficient and add to the total reflection contribution
+    Vector3 reflectionContribution = intersectionInfo.specular.multiplyComponents(reflectedIllumination);
+
+    return reflectionContribution;
   }
 };

@@ -28,22 +28,22 @@ int main()
     // SPHERES
     MaterialParameters materialRed;
     materialRed.diffuse = Vector3(0.8f, 0.2f, 0.2f);
-    materialRed.specular = Vector3(0.5f, 0.5f, 0.5f);
+    materialRed.specular = Vector3(0.8f, 0.8f, 0.8f);
     materialRed.normal = Vector3(0.0f, 1.0f, 0.0f);
     MaterialParameters materialGreen;
     materialGreen.diffuse = Vector3(0.2f, 0.8f, 0.2f);
-    materialGreen.specular = Vector3(0.5f, 0.5f, 0.5f);
+    materialGreen.specular = Vector3(0.25f, 0.25f, 0.25f);
     materialGreen.normal = Vector3(0.0f, 1.0f, 0.0f);
 
     std::vector<Object> objects = {
-        Object(Vector3(1.0f, -1.5f, -2.0f), 1.0f, materialGreen),
+        Object(Vector3(1.0f, -2.0f, -2.0f), 1.0f, materialGreen),
         Object(Vector3(0.0f, 0.0f, -2.0f), 1.0f, materialRed),
         Object(Vector3(-1.0f, 1.0f, -4.0f), 1.0f, materialGreen)};
 
     // SCENE
     Scene scene(camera, lights, objects);
 
-    Image resultImage = scene.render(imageWidth, imageHeight, 3);
+    Image resultImage = scene.render(imageWidth, imageHeight, 5);
 
     // Save the result image to a file (you can use the Image write method from previous implementations)
     resultImage.write("rendered_image.ppm");
