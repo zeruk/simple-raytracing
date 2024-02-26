@@ -19,7 +19,7 @@ int main()
 
     // LIGHTS
     Vector3 lightPosition(5.0f, 5.0f, 5.0f);
-    Vector3 lightIntensity(1.0f, 0.0f, 10.0f);
+    Vector3 lightIntensity(10.0f, 10.0f, 10.0f);
 
     Light light1(lightPosition, lightIntensity);
     std::vector<Light> lights = {light1};

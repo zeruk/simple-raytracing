@@ -42,13 +42,23 @@ public:
           {
             intersection = true;
             break; // Stop at the first intersection
-          }
+          }        // TODO: Choose closest one
         }
 
         // Set pixel color based on intersection
         if (intersection)
         {
-          image.pixels[x][y] = intersectionInfo.diffuse; // Color for intersection
+          image.pixels[x][y] = Vector3(0.0f, 0.0f, 0.0f);
+          for (const Light &light : lights)
+          {
+            Vector3 lightDirection, lightPower;
+            light.at(intersectionInfo.intersectionPoint, lightDirection, lightPower);
+
+            float dotProduct = std::max(0.0f, intersectionInfo.normal.dot(lightDirection));
+            Vector3 diffuseContribution = intersectionInfo.diffuse.multiplyComponents(lightPower) * dotProduct;
+
+            image.pixels[x][y] = image.pixels[x][y] + diffuseContribution;
+          }
         }
         else
         {

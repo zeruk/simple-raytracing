@@ -14,8 +14,6 @@ public:
   Vector3 upAdjusted;
   int sizeX;
   int sizeY;
-  // float stepX; // x_len = 1
-  // float stepY; // y_len = sizeY / sizeX * x_len / sizeY
 
   Camera(float focalLength, const Vector3 &position, const Vector3 &target, const Vector3 &up, int sizeX, int sizeY)
       : focalLength(focalLength), position(position), sizeX(sizeX), sizeY(sizeY)
