@@ -21,7 +21,7 @@ int main()
     std::vector<Light> lights = {
         // position, intencity
         Light(Vector3(5.0f, 5.0f, 5.0f), Vector3(4.0f, 4.0f, 4.0f)),
-        Light(Vector3(5.0f, -6.0f, 0.0f), Vector3(5.0f, 5.0f, 5.0f))
+        Light(Vector3(5.0f, -6.0f, 3.0f), Vector3(5.0f, 5.0f, 5.0f))
         //
     };
 
@@ -34,11 +34,16 @@ int main()
     materialGreen.diffuse = Vector3(0.2f, 0.8f, 0.2f);
     materialGreen.specular = Vector3(0.25f, 0.25f, 0.25f);
     materialGreen.normal = Vector3(0.0f, 1.0f, 0.0f);
+    MaterialParameters materialBlue;
+    materialBlue.diffuse = Vector3(0.2f, 0.2f, 0.8f);
+    materialBlue.specular = Vector3(0.3f, 0.3f, 0.6f);
+    materialBlue.normal = Vector3(0.0f, 1.0f, 0.0f);
 
     std::vector<Object *> objects;
     objects.push_back(new Sphere(Vector3(1.0f, -2.0f, -2.0f), 1.0f, materialGreen));
     objects.push_back(new Sphere(Vector3(0.0f, 0.0f, -2.0f), 1.0f, materialRed));
     objects.push_back(new Sphere(Vector3(-1.0f, 1.0f, -4.0f), 1.0f, materialGreen));
+    objects.push_back(new Plane(Vector3(0.3f, 0.3f, 0.3f), -10.0f, materialBlue));
 
     // SCENE
     Scene scene(camera, lights, objects);
@@ -47,6 +52,12 @@ int main()
 
     // Save the result image to a file (you can use the Image write method from previous implementations)
     resultImage.write("rendered_image.ppm");
+
+    // Cleanup: Delete allocated objects
+    for (Object *obj : objects)
+    {
+        delete obj;
+    }
 
     return 0;
 }
