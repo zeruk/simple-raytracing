@@ -8,13 +8,13 @@
 #include "./Plane.cpp"
 #include "./Scene.cpp"
 
-const int RENDERS = 5;
-const int RAY_BOUNCES = 6;
+const int RENDERS = 1;
+const int RAY_BOUNCES = 5;
 
 int main()
 {
-    int imageWidth = 512;
-    int imageHeight = 512;
+    int imageWidth = 500;
+    int imageHeight = 500;
 
     // CAMERA
     Vector3 cameraPosition(0.0f, 0.0f, 5.0f);
@@ -33,7 +33,7 @@ int main()
     // SPHERES
     MaterialParameters materialRed;
     materialRed.diffuse = Vector3(0.8f, 0.2f, 0.2f);
-    materialRed.specular = Vector3(0.8f, 0.8f, 0.8f);
+    materialRed.specular = Vector3(0.999f, 0.999f, 0.999f);
     materialRed.normal = Vector3(0.0f, 1.0f, 0.0f);
     MaterialParameters materialGreen;
     materialGreen.diffuse = Vector3(0.2f, 0.8f, 0.2f);
@@ -43,11 +43,16 @@ int main()
     materialBlue.diffuse = Vector3(0.2f, 0.2f, 0.8f);
     materialBlue.specular = Vector3(0.3f, 0.3f, 0.6f);
     materialBlue.normal = Vector3(0.0f, 1.0f, 0.0f);
+    MaterialParameters materialGray;
+    materialGray.diffuse = Vector3(1.0f, 1.0f, 1.0f);
+    materialGray.specular = Vector3(1.0f, 1.0f, 1.0f);
+    materialGray.normal = Vector3(0.0f, 1.0f, 0.0f);
 
     std::vector<Object *> objects;
     objects.push_back(new Sphere(Vector3(1.0f, -2.0f, -2.0f), 1.0f, materialGreen));
     objects.push_back(new Sphere(Vector3(0.0f, 0.0f, -2.0f), 1.0f, materialRed));
     objects.push_back(new Sphere(Vector3(-1.0f, 1.0f, -4.0f), 1.0f, materialGreen));
+    objects.push_back(new Sphere(Vector3(0.5f, -0.5f, -3.0f), 1.0f, materialGray));
     objects.push_back(new Plane(Vector3(0.3f, 0.3f, 0.3f), -10.0f, materialBlue));
 
     // SCENE
