@@ -132,7 +132,7 @@ public:
     Vector3 reflectedDirection = ray.direction - intersectionInfo.normal * 2.0f * (ray.direction.dot(intersectionInfo.normal));
 
     // Create a reflected ray
-    Ray reflectedRay(intersectionInfo.intersectionPoint, reflectedDirection);
+    Ray reflectedRay(intersectionInfo.intersectionPoint + reflectedDirection * 0.0001f, reflectedDirection);
 
     // Recursively compute illumination on the reflected ray
     Vector3 reflectedIllumination = renderRay(reflectedRay, reflectionDepth - 1);

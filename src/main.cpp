@@ -8,8 +8,8 @@
 #include "./Plane.cpp"
 #include "./Scene.cpp"
 
-const int RENDERS = 1;
-const int RAY_BOUNCES = 5;
+const int RENDERS = 5;
+const int RAY_BOUNCES = 3;
 
 int main()
 {
@@ -50,10 +50,10 @@ int main()
 
     std::vector<Object *> objects;
     objects.push_back(new Sphere(Vector3(1.0f, -2.0f, -2.0f), 1.0f, materialGreen));
-    objects.push_back(new Sphere(Vector3(0.0f, 0.0f, -2.0f), 1.0f, materialRed));
+    // objects.push_back(new Sphere(Vector3(0.0f, 0.0f, -2.0f), 1.0f, materialRed));
     objects.push_back(new Sphere(Vector3(-1.0f, 1.0f, -4.0f), 1.0f, materialGreen));
     objects.push_back(new Sphere(Vector3(0.5f, -0.5f, -3.0f), 1.0f, materialGray));
-    objects.push_back(new Plane(Vector3(0.3f, 0.3f, 0.3f), -10.0f, materialBlue));
+    // objects.push_back(new Plane(Vector3(0.3f, 0.3f, 0.3f), -10.0f, materialBlue));
 
     // SCENE
     Scene scene(camera, lights, objects);

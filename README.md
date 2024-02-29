@@ -60,7 +60,12 @@ Recursive ray tracing is implemented to simulate reflections, refractions, and m
 
 ![Recursive Ray Tracing](./results/rendered_image_6.jpg)
 
-### 8) Additional Objects - Plane Class and Anti-Aliasing
-The final evolution introduces the `Plane` class, expanding the variety of objects that can be rendered in the scene.
+### 8) Additional Objects - Plane Class
+The `Plane` and virtual `Object` class implemented, expanding the variety of objects that can be rendered in the scene.(Previous `Object` class renamed to `Sphere`)
 
 ![Plane Class](./results/rendered_image_7.jpg)
+
+### 9) Additional Objects -  Anti-Aliasing
+The final evolution introduces anti-aliasing - rendering the scene multiple times to get smoother image.
+
+![Plane Class](./results/rendered_image_8.jpg)
