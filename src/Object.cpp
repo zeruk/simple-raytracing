@@ -2,14 +2,7 @@
 #include <iostream>
 #include "../src/Vector3.cpp"
 #include "../src/Ray.cpp"
-
-struct MaterialParameters
-{
-  Vector3 diffuse;  // Diffuse coefficient
-  Vector3 specular; // Specular coefficient
-  Vector3 normal;
-  Vector3 intersectionPoint;
-};
+#include "../src/Materials.cpp"
 
 class Object
 {

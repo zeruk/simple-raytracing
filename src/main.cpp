@@ -1,10 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
-#include "../src/Vector3.cpp"
+#include "./Vector3.cpp"
+#include "./Materials.cpp"
 #include "./Image.cpp"
 #include "./Camera.cpp"
 #include "./Sphere.cpp"
+#include "./OriginMarker.cpp"
 #include "./Plane.cpp"
 #include "./Scene.cpp"
 
@@ -30,30 +32,13 @@ int main()
         //
     };
 
-    // SPHERES
-    MaterialParameters materialRed;
-    materialRed.diffuse = Vector3(0.8f, 0.2f, 0.2f);
-    materialRed.specular = Vector3(0.999f, 0.999f, 0.999f);
-    materialRed.normal = Vector3(0.0f, 1.0f, 0.0f);
-    MaterialParameters materialGreen;
-    materialGreen.diffuse = Vector3(0.2f, 0.8f, 0.2f);
-    materialGreen.specular = Vector3(0.25f, 0.25f, 0.25f);
-    materialGreen.normal = Vector3(0.0f, 1.0f, 0.0f);
-    MaterialParameters materialBlue;
-    materialBlue.diffuse = Vector3(0.2f, 0.2f, 0.8f);
-    materialBlue.specular = Vector3(0.3f, 0.3f, 0.6f);
-    materialBlue.normal = Vector3(0.0f, 1.0f, 0.0f);
-    MaterialParameters materialGray;
-    materialGray.diffuse = Vector3(1.0f, 1.0f, 1.0f);
-    materialGray.specular = Vector3(1.0f, 1.0f, 1.0f);
-    materialGray.normal = Vector3(0.0f, 1.0f, 0.0f);
-
     std::vector<Object *> objects;
-    objects.push_back(new Sphere(Vector3(1.0f, -2.0f, -2.0f), 1.0f, materialGreen));
-    // objects.push_back(new Sphere(Vector3(0.0f, 0.0f, -2.0f), 1.0f, materialRed));
-    objects.push_back(new Sphere(Vector3(-1.0f, 1.0f, -4.0f), 1.0f, materialGreen));
-    objects.push_back(new Sphere(Vector3(0.5f, -0.5f, -3.0f), 1.0f, materialGray));
-    // objects.push_back(new Plane(Vector3(0.3f, 0.3f, 0.3f), -10.0f, materialBlue));
+    // objects.push_back(new Sphere(Vector3(1.0f, -2.0f, -2.0f), 1.0f, MATERIAL_GREEN));
+    // objects.push_back(new Sphere(Vector3(0.0f, 0.0f, -2.0f), 1.0f, MATERIAL_RED));
+    // objects.push_back(new Sphere(Vector3(-1.0f, 1.0f, -4.0f), 1.0f, MATERIAL_GREEN));
+    // objects.push_back(new Sphere(Vector3(0.5f, -0.5f, -3.0f), 1.0f, MATERIAL_GRAY));
+    objects.push_back(new OriginMarker(Vector3(2, 2, 0), 0.3f));
+    // objects.push_back(new Plane(Vector3(0.3f, 0.3f, 0.3f), -10.0f, MATERIAL_BLUE));
 
     // SCENE
     Scene scene(camera, lights, objects);
