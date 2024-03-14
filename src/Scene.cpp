@@ -6,6 +6,8 @@
 #include "../src/Object.cpp"
 #include "../src/Camera.cpp"
 
+const bool LOGGING = true;
+
 class Scene
 {
 public:
@@ -18,12 +20,14 @@ public:
   Image render(int width, int height, int reflectionDepth)
   {
     Image image(width, height);
-
-    for (int y = 0; y < height; ++y)
+    int limY = LOGGING ? 217 : height;
+    int limX = LOGGING ? 203 : width;
+    for (int y = LOGGING ? 207 : 0; y < limY; ++y)
     {
-      for (int x = 0; x < width; ++x)
+      for (int x = LOGGING ? 183 : 0; x < limX; ++x)
       {
         // Map pixel coordinates to ray
+        LOGGING &&std::cout << "(x:" << x << ",y:" << y << ")" << std::endl;
         Ray ray = camera.pixelToRay(x - (width / 2), y - (height / 2));
 
         image.pixels[x][y] = renderRay(ray, reflectionDepth);
@@ -44,6 +48,7 @@ public:
     {
       if (object->intersect(ray, intersectionInfo))
       {
+        LOGGING &&std::cout << "depth:" << reflectionDepth << ", intersection" << std::endl;
         if (!intersection)
           closestIntersection = intersectionInfo;
         intersection = true;
@@ -51,6 +56,7 @@ public:
         if ((closestIntersection.intersectionPoint - camera.position).abs() >
             (intersectionInfo.intersectionPoint - camera.position).abs())
         {
+          LOGGING &&std::cout << "swap objects" << std::endl;
           std::swap(closestIntersection, intersectionInfo);
         }
         // Choose closest one
