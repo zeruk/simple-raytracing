@@ -26,7 +26,7 @@ public:
       if (t >= 0)
       {
         // Intersection found, populate intersectionInfo
-        intersectionInfo.intersectionPoint = ray.origin + ray.direction * t;
+        intersectionInfo.intersectionPoint = ray.origin + ray.direction * t * 2;
         intersectionInfo.normal = normal;
         intersectionInfo.diffuse = materialParams.diffuse;
         intersectionInfo.specular = materialParams.specular;

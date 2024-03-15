@@ -6,7 +6,7 @@
 #include "../src/Object.cpp"
 #include "../src/Camera.cpp"
 
-const bool LOGGING = true;
+const bool LOGGING = false;
 
 class Scene
 {
@@ -20,17 +20,20 @@ public:
   Image render(int width, int height, int reflectionDepth)
   {
     Image image(width, height);
-    int limY = LOGGING ? 217 : height;
-    int limX = LOGGING ? 203 : width;
-    for (int y = LOGGING ? 207 : 0; y < limY; ++y)
+    const int DEBUG_X = 192;
+    const int DEBUG_Y = 200;
+    int limY = LOGGING ? DEBUG_Y + 1 : height;
+    int limX = LOGGING ? DEBUG_X + 1 : width;
+    for (int y = LOGGING ? DEBUG_Y : 0; y < limY; ++y)
     {
-      for (int x = LOGGING ? 183 : 0; x < limX; ++x)
+      for (int x = LOGGING ? DEBUG_X : 0; x < limX; ++x)
       {
         // Map pixel coordinates to ray
         LOGGING &&std::cout << "(x:" << x << ",y:" << y << ")" << std::endl;
         Ray ray = camera.pixelToRay(x - (width / 2), y - (height / 2));
 
         image.pixels[x][y] = renderRay(ray, reflectionDepth);
+        LOGGING &&std::cout << "final color" << image.pixels[x][y] << std::endl;
       }
     }
 
@@ -68,6 +71,11 @@ public:
     {
       Vector3 totalDiffuse(0.0f, 0.0f, 0.0f);
       Vector3 totalSpecular(0.0f, 0.0f, 0.0f);
+      LOGGING &&std::cout << "color (depth" << reflectionDepth << "): "
+                          << closestIntersection.diffuse << " ORIGINAL intersecting color:" << closestIntersection.diffuse
+                          << " normal: " << closestIntersection.normal
+                          << " point: " << closestIntersection.intersectionPoint
+                          << std::endl;
       for (const Light &light : lights)
       {
         // Check if the point is in shadow
@@ -82,21 +90,15 @@ public:
             Vector3 diffuseContribution = closestIntersection.diffuse.multiplyComponents(lightPower) * dotProduct;
             totalDiffuse = totalDiffuse + diffuseContribution;
           }
-
-          // Specular reflection model (Phong reflection model)
-          Vector3 reflectedDirection = closestIntersection.normal * (lightDirection.dot(closestIntersection.normal)) * 2.0f - lightDirection;
-          float dotProductSpecular = std::max(0.0f, ray.direction.dot(reflectedDirection));
-          Vector3 specularContribution = closestIntersection.specular.multiplyComponents(lightPower) * std::pow(dotProductSpecular, 32);
-
-          totalSpecular = totalSpecular + specularContribution;
         }
       }
       // Ambient reflection model
       Vector3 ambientColor(0.1f, 0.1f, 0.1f); // Ambient color for the scene
       Vector3 ambientContribution = ambientColor.multiplyComponents(closestIntersection.diffuse);
+      const float intencity = 1;
 
       // Reflection contribution
-      Vector3 reflectionContribution = calculateReflectionContribution(ray, intersectionInfo, reflectionDepth);
+      Vector3 reflectionContribution = calculateReflectionContribution(ray, closestIntersection, intencity, reflectionDepth);
 
       // Total lighting (diffuse + specular + ambient)
       Vector3 totalLighting = totalDiffuse + totalSpecular + reflectionContribution + ambientContribution;
@@ -127,24 +129,32 @@ public:
     return false;
   }
 
-  Vector3 calculateReflectionContribution(const Ray &ray, const MaterialParameters &intersectionInfo, int reflectionDepth)
+  Vector3 calculateReflectionContribution(const Ray &ray, const MaterialParameters &intersectionInfo, float intencity, int reflectionDepth)
   {
-    if (reflectionDepth <= 0)
+    const float SPECULAR_TRESHOLD = 0.05f;
+    if (reflectionDepth <= 0 || intersectionInfo.specular.abs() < SPECULAR_TRESHOLD)
     {
-      return Vector3(0.0f, 0.0f, 0.0f); // No more reflections, return black
+      return Vector3(0.0f, 0.0f, 0.0f); // No more reflections or color is too dark, return black
     }
 
     // Calculate reflection direction
     Vector3 reflectedDirection = ray.direction - intersectionInfo.normal * 2.0f * (ray.direction.dot(intersectionInfo.normal));
 
     // Create a reflected ray
-    Ray reflectedRay(intersectionInfo.intersectionPoint + reflectedDirection * 0.0001f, reflectedDirection);
+    Ray reflectedRay(intersectionInfo.intersectionPoint, reflectedDirection);
+
+    LOGGING &&std::cout << "reflectionContrib (depth" << reflectionDepth << ") ray origin:"
+                        << reflectedRay.origin << " direction: " << reflectedRay.direction
+                        << "reflected Dir" << reflectedDirection
+                        << "ray" << ray.origin << ray.direction
+                        << std::endl
+                        << std::endl;
 
     // Recursively compute illumination on the reflected ray
     Vector3 reflectedIllumination = renderRay(reflectedRay, reflectionDepth - 1);
 
     // Apply specular coefficient and add to the total reflection contribution
-    Vector3 reflectionContribution = intersectionInfo.specular.multiplyComponents(reflectedIllumination);
+    Vector3 reflectionContribution = (intersectionInfo.specular.multiplyComponents(reflectedIllumination)) * intencity;
 
     return reflectionContribution;
   }
