@@ -46,7 +46,7 @@ int main()
 
     //
     // objects.push_back(new Sphere(Vector3(0.5f, -0.5f, -3.0f), 1.0f, MATERIAL_GRAY));
-    objects.push_back(new Plane(Vector3(0.3f, 0.3f, 0.3f), -2.0f, MATERIAL_BLUE));
+    objects.push_back(new Plane(Vector3(0.3f, 0.3f, 0.3f), -3.5f, MATERIAL_BLUE));
 
     // SCENE
     Scene scene(camera, lights, objects);

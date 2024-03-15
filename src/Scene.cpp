@@ -21,7 +21,7 @@ public:
   {
     Image image(width, height);
     const int DEBUG_X = 192;
-    const int DEBUG_Y = 200;
+    const int DEBUG_Y = 160;
     int limY = LOGGING ? DEBUG_Y + 1 : height;
     int limX = LOGGING ? DEBUG_X + 1 : width;
     for (int y = LOGGING ? DEBUG_Y : 0; y < limY; ++y)
@@ -141,7 +141,7 @@ public:
     Vector3 reflectedDirection = ray.direction - intersectionInfo.normal * 2.0f * (ray.direction.dot(intersectionInfo.normal));
 
     // Create a reflected ray
-    Ray reflectedRay(intersectionInfo.intersectionPoint, reflectedDirection);
+    Ray reflectedRay(intersectionInfo.intersectionPoint + (reflectedDirection * 0.001f), reflectedDirection.normalize());
 
     LOGGING &&std::cout << "reflectionContrib (depth" << reflectionDepth << ") ray origin:"
                         << reflectedRay.origin << " direction: " << reflectedRay.direction
